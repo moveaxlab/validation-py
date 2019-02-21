@@ -7,7 +7,7 @@ from validation.types import Type
 from validation.validator import ValidatorFactory
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-filename = './vectors.json'
+filename = './validation-test-vectors/vectors.json'
 
 with open('{}/{}'.format(dir_path, filename)) as infile:
     vectors = json.load(infile)
