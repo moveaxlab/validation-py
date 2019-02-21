@@ -1,0 +1,2 @@
+class SpecError(Exception):
+    pass

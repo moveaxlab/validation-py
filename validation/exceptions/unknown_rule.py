@@ -1,0 +1,2 @@
+class UnknownRule(Exception):
+    pass
