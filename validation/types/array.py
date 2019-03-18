@@ -1,7 +1,7 @@
 """ Array """
 from .sequence import SequenceType
-from ..constants import types
-from ..exceptions import ArrayValidationError, ValidationError
+from ..constants import rules, types
+from ..exceptions import ArrayValidationError, RuleError, ValidationError
 
 
 class ArrayType(SequenceType):
@@ -21,17 +21,23 @@ class ArrayType(SequenceType):
         if not self.nested_validation:
             super().validate(value)
         else:
-            if not self._validate_type(value):
-                raise ValidationError(errors=[TypeError(self, value)])
-            array_rule_errors = self._validate_rules(value)
-            element_errors = []
-            for element in value:
-                try:
-                    self.elements.validate(element)
-                except ValidationError as element_exc:
-                    element_errors.extend(element_exc.get_errors())
-            if array_rule_errors or element_errors:
-                raise ArrayValidationError(element_errors, array_rule_errors)
+            # TODO: refactor to avoid duplication
+            if self.is_null(value):
+                if not self.nullable:
+                    raise ValidationError(
+                        errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+            else:
+                if not self._validate_type(value):
+                    raise ValidationError(errors=[TypeError(self, value)])
+                array_rule_errors = self._validate_rules(value)
+                element_errors = []
+                for element in value:
+                    try:
+                        self.elements.validate(element)
+                    except ValidationError as element_exc:
+                        element_errors.extend(element_exc.get_errors())
+                if array_rule_errors or element_errors:
+                    raise ArrayValidationError(element_errors, array_rule_errors)
 
     @classmethod
     def _validate_type(cls, value) -> bool:

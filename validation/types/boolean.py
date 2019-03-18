@@ -8,6 +8,6 @@ class BooleanType(Type):
     def name() -> str:
         return types.BOOLEAN
 
-    @classmethod
-    def _validate_type(cls, value) -> bool:
+    @staticmethod
+    def _validate_type(value) -> bool:
         return isinstance(value, bool)

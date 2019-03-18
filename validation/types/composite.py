@@ -1,7 +1,7 @@
 """ Composite Type """
 from .type import Type
-from ..constants import types
-from ..exceptions import ObjectValidationError, ValidationError
+from ..constants import rules, types
+from ..exceptions import ObjectValidationError, RuleError, ValidationError
 
 
 class CompositeType(Type):
@@ -23,18 +23,27 @@ class CompositeType(Type):
         if not self.nested_validation:
             super().validate(value)
         else:
-            if not self._validate_type(value):
-                raise ValidationError(errors=[TypeError(self, value)])
-            object_rule_errors = self._validate_rules(value)
-            schema_errors = []
-            for k, v in value.items():
-                try:
-                    self.schema[k].validate(v)
-                except ValidationError as key_exc:
-                    schema_errors.extend(key_exc.get_errors())
-            if object_rule_errors or schema_errors:
-                raise ObjectValidationError(object_rule_errors, schema_errors)
+            # TODO: refactor to avoid duplication
+            if self.is_null(value):
+                if not self.nullable:
+                    raise ValidationError(
+                        errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+            else:
+                if not self._validate_type(value):
+                    raise ValidationError(errors=[TypeError(self, value)])
+                object_rule_errors = self._validate_rules(value)
+                schema_errors = {}
+                for k, v in value.items():
+                    try:
+                        self.schema[k].validate(v)
+                    except KeyError:
+                        # TODO: implement strict validation
+                        pass
+                    except ValidationError as key_exc:
+                        schema_errors[k] = key_exc.get_errors()
+                if object_rule_errors or schema_errors:
+                    raise ObjectValidationError(object_rule_errors, schema_errors)
 
-    @classmethod
-    def _validate_type(cls, value) -> bool:
+    @staticmethod
+    def _validate_type(value) -> bool:
         return hasattr(value, '__getitem__')

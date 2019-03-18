@@ -1,16 +1,23 @@
+""" Hex """
 import string
 
 from .rule import Rule
+from ..constants import rules
+from ..exceptions import SpecError
+from ..types import StringType
 
 
 class HexRule(Rule):
+    supported_types = (StringType,)
 
     @staticmethod
     def name() -> str:
-        return 'hex'
+        return rules.HEX
 
-    def apply(self, data):
-        for c in data:
-            if c not in string.hexdigits:
-                return False
-        return True
+    def _abides_by_the_rule(self, value: str) -> bool:
+        # Fail when the value is not hexadecimal
+        return all(char in string.hexdigits for char in value)
+
+    def _sanitize_params(self):
+        if self.params:
+            raise SpecError(f'The HexRule takes no parameters')

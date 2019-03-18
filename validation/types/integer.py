@@ -8,6 +8,6 @@ class IntegerType(Type):
     def name() -> str:
         return types.INTEGER
 
-    @classmethod
-    def _validate_type(cls, value) -> bool:
+    @staticmethod
+    def _validate_type(value) -> bool:
         return isinstance(value, int)

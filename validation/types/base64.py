@@ -15,6 +15,6 @@ class Base64Type(StringType):
 
     @classmethod
     def _validate_type(cls, value) -> bool:
-        if not super(Base64Type, cls)._validate_type(value):
+        if not super()._validate_type(value):
             return False
         return BASE64_RE.match(value) is not None

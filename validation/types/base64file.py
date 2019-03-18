@@ -7,7 +7,7 @@ from ..constants import types
 # Constants
 BASE64_FILE_RE = re.compile(
     r'^'  # beginning of string
-    r'data:[a-z]+/[a-z]+;base64,'
+    r'data:(?P<type>[a-z]+)/(?P<format>[a-z]+);base64,'  # header
     r'(?:[A-Za-z0-9+/]{4})*'
     r'(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
     r'$')  # end of string

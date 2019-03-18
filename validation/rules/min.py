@@ -1,22 +1,19 @@
+""" Min """
 from .rule import Rule
+from ..constants import rules
+from ..types import FloatType, IntegerType
 
 
 class MinRule(Rule):
+    supported_types = (FloatType, IntegerType,)
 
     @staticmethod
     def name() -> str:
-        return 'min'
+        return rules.MIN
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, minimum=int(params_string), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the value is lower than the target.
+        return float(value) >= self.target
 
-    def __init__(self, alias, minimum, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.min = minimum
-
-    def apply(self, data):
-        return data >= self.min
-
-    def get_params(self):
-        return [self.min]
+    def _sanitize_params(self):
+        self.target = float(self.params[0])

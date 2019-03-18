@@ -9,7 +9,7 @@ class NullableRule(Rule):
 
     @staticmethod
     def name() -> str:
-        return rules.REQUIRED
+        return rules.NULLABLE
 
     def _abides_by_the_rule(self, value) -> bool:
-        return True
+        pass

@@ -1,24 +1,23 @@
+""" File Format """
 from .rule import Rule
-
+from ..constants import rules
+from ..exceptions import SpecError
+from ..types import Base64EncodedFileType
 from ..utils.base64file_utils import get_format
 
 
 class FileFormatRule(Rule):
+    supported_types = (Base64EncodedFileType,)
 
     @staticmethod
     def name() -> str:
-        return 'file_format'
+        return rules.FILE_FORMAT
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, formats=params_string.split(','), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the format of the given file is not in the formats list.
+        return get_format(value) in self.formats
 
-    def __init__(self, alias, formats, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.formats = formats
-
-    def apply(self, data):
-        return get_format(data) in self.formats
-
-    def get_params(self):
-        return [",".join(self.formats)]
+    def _sanitize_params(self):
+        if not self.params:
+            raise SpecError(f'At least one file format is required')
+        self.formats = self.params

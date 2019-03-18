@@ -17,4 +17,4 @@ class MinSizeRule(Rule):
 
     def _sanitize_params(self):
         # The file size is expressed in bytes.
-        self.minsize = self.params[0]
+        self.minsize = int(self.params[0])

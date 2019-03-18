@@ -10,6 +10,6 @@ class SequenceType(Type):
     def name() -> str:
         return types.SEQUENCE
 
-    @classmethod
-    def _validate_type(cls, value) -> bool:
+    @staticmethod
+    def _validate_type(value) -> bool:
         return hasattr(value, '__iter__')

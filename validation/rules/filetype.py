@@ -1,24 +1,20 @@
+""" File Type """
 from .rule import Rule
-
+from ..constants import rules
+from ..types import Base64EncodedFileType
 from ..utils.base64file_utils import get_type
 
 
 class FileTypeRule(Rule):
+    supported_types = (Base64EncodedFileType,)
 
     @staticmethod
     def name() -> str:
-        return 'file_type'
+        return rules.FILE_TYPE
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, file_type=params_string, spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the type of the given file is not equal to the given type.
+        return get_type(value) == self.type
 
-    def __init__(self, alias, file_type, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.type = file_type
-
-    def apply(self, data):
-        return get_type(data) == self.type
-
-    def get_params(self):
-        return [self.type]
+    def _sanitize_params(self):
+        self.type = self.params[0]

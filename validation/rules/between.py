@@ -1,27 +1,19 @@
+""" Between """
 from .rule import Rule
+from ..constants import rules
+from ..types import FloatType, IntegerType
 
 
 class BetweenRule(Rule):
+    supported_types = (FloatType, IntegerType,)
 
     @staticmethod
     def name() -> str:
-        return 'between'
+        return rules.BETWEEN
 
     def _abides_by_the_rule(self, value) -> bool:
-        pass
+        # Fails when the value goes beyond the [min, max] range.
+        return self.min <= value <= self.max
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        minimum, maximum = params_string.split(',')
-        return cls(alias=alias, minimum=int(minimum), maximum=int(maximum), spec=spec)
-
-    def __init__(self, alias, minimum, maximum, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.min = minimum
-        self.max = maximum
-
-    def apply(self, data):
-        return self.min <= data <= self.max
-
-    def get_params(self):
-        return [self.min, self.max]
+    def _sanitize_params(self):
+        self.min, self.max = self.params

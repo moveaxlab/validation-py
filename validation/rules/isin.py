@@ -1,22 +1,22 @@
+""" Is In """
 from .rule import Rule
+from ..constants import rules
+from ..exceptions import SpecError
+from ..types import Type
 
 
 class InRule(Rule):
+    supported_types = (Type,)
 
     @staticmethod
     def name() -> str:
-        return 'in'
+        return rules.IN
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, collection=params_string.split(','), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the value is not equal to any of the targets.
+        return str(value) in self.targets
 
-    def __init__(self, alias, collection, spec):
-        super().__init__(alias, spec)
-        self.collection = collection
-
-    def apply(self, data):
-        return str(data) in self.collection
-
-    def get_params(self):
-        return [",".join(self.collection)]
+    def _sanitize_params(self):
+        if not self.params:
+            raise SpecError(f'At least one parameter is required')
+        self.targets = self.params

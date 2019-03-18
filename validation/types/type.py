@@ -39,14 +39,15 @@ class Type(metaclass=MetaType):
 
     def validate(self, value):
         """ Validate the value type and apply the rules """
-        if not self._validate_type(value):
-            raise ValidationError(errors=[TypeError(self, value)])
-        if not self.is_null(value):
+        if self.is_null(value):
+            if not self.nullable:
+                raise ValidationError(errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+        else:
+            if not self._validate_type(value):
+                raise ValidationError(errors=[TypeError(self, value)])
             rule_errors = self._validate_rules(value)
             if rule_errors:
                 raise ValidationError(errors=rule_errors)
-        if not self.nullable:
-            raise ValidationError(errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
 
     def _validate_rules(self, value) -> List[RuleError]:
         """ Validate the value against the rules """
@@ -58,6 +59,7 @@ class Type(metaclass=MetaType):
                 rule_errors.append(e)
         return rule_errors
 
+    @classmethod
     @abstractmethod
-    def _validate_type(self, value) -> bool:
+    def _validate_type(value) -> bool:
         """ Validate the value type """

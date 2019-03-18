@@ -8,8 +8,8 @@ class JWTType(CompositeType):
     def name() -> str:
         return types.JWT
 
-    @classmethod
-    def _validate_type(cls, value) -> bool:
+    @staticmethod
+    def _validate_type(value) -> bool:
         if not super()._validate_type(value):
             return False
         raise NotImplementedError
