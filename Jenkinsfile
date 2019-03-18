@@ -8,7 +8,7 @@ node {
 
         stage('Install dependencies') {
             sshagent([env.SSH_KEY_ID]) {
-                sh "pip3 install -r requirements.txt --process-dependency-links"
+                sh "poetry install"
             }
         }
 

@@ -1,16 +1,18 @@
-from .string import String
+""" UUID """
 from uuid import UUID as create_uuid
 
+from . import StringType
+from ..constants import types
 
-class UUID(String):
 
+class UUIDType(StringType):
     @staticmethod
-    def name():
-        return 'uuid'
+    def name() -> str:
+        return types.UUID
 
     @classmethod
-    def check(cls, value):
-        if not super(UUID, cls).check(value):
+    def _validate_type(cls, value) -> bool:
+        if not super()._validate_type(value):
             return False
         try:
             created = create_uuid(str(value), version=4)

@@ -1,24 +1,20 @@
+""" Min Size """
 from .rule import Rule
-
+from ..constants import rules
+from ..types import Base64EncodedFileType
 from ..utils.base64file_utils import get_size
 
 
 class MinSizeRule(Rule):
+    supported_types = (Base64EncodedFileType,)
 
     @staticmethod
-    def name():
-        return 'min_size'
+    def name() -> str:
+        return rules.MIN_SIZE
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, minsize=int(params_string), spec=spec)
+    def _abides_by_the_rule(self, value):
+        return get_size(value) >= self.minsize
 
-    def __init__(self, alias, minsize, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.minsize = minsize
-
-    def apply(self, data):
-        return get_size(data) >= self.minsize
-
-    def get_params(self):
-        return [self.minsize]
+    def _sanitize_params(self):
+        # The file size is expressed in bytes.
+        self.minsize = self.params[0]

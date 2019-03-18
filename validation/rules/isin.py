@@ -4,7 +4,7 @@ from .rule import Rule
 class InRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'in'
 
     @classmethod

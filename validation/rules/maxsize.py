@@ -6,7 +6,7 @@ from ..utils.base64file_utils import get_size
 class MaxSizeRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'max_size'
 
     @classmethod

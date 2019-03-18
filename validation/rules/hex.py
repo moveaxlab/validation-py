@@ -6,7 +6,7 @@ from .rule import Rule
 class HexRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'hex'
 
     def apply(self, data):

@@ -1,58 +1,63 @@
+""" Type """
 from abc import ABCMeta, abstractmethod
+from typing import List
 
-from ..rules import EqualsRule, InRule, RequiredRule, NullableRule
+from ..constants import rules
+from ..exceptions import RuleError, TypeError, ValidationError
 
 
 class MetaType(ABCMeta):
-
-    def __new__(cls, name, bases, dct):
-
-        if 'supported_rules' not in dct:
-            dct['supported_rules'] = set()
-
+    def __new__(mcs, name, bases, dct):
+        # Child class extends the parent's null_values
         if 'null_values' not in dct:
             dct['null_values'] = []
-
         for base in bases:
-            for rule in base.supported_rules:
-                dct['supported_rules'].add(rule)
             for null_value in base.null_values:
                 dct['null_values'].append(null_value)
-
-        return super().__new__(cls, name, bases, dct)
+        return super().__new__(mcs, name, bases, dct)
 
 
 class Type(metaclass=MetaType):
-
-    supported_rules = {EqualsRule, InRule, NullableRule, RequiredRule}
+    # List of NULL equivalent values for the Type
     null_values = [None]
 
-    @staticmethod
-    @abstractmethod
-    def name():
-        """Defines the name by which the type is identified"""
+    def __init__(self, spec: dict):
+        from ..rules.rule_factory import RuleFactory
+        self.rule_factory = RuleFactory
+        self.nullable = spec['nullable']
+        self.rules = [self.rule_factory.make(type=self, **rule) for rule in spec['rules']]
 
     @classmethod
-    @abstractmethod
-    def check(cls, value):
-        """Checks whether the value belongs to the defining type"""
-
-    @classmethod
-    def is_null(cls, value):
+    def is_null(cls, value) -> bool:
+        """ Check whether the value is null or not """
         return value in cls.null_values
 
-    @classmethod
-    def supports(cls, ruleset):
-        for rule in ruleset:
-            if rule.__class__ not in cls.supported_rules:
-                return False
-        return True
-
     @staticmethod
-    def get(type_name):
-        from . import types
+    @abstractmethod
+    def name() -> str:
+        """ Specifies the name of the type """
 
-        try:
-            return types[type_name]
-        except KeyError:
-            raise ValueError('Unknown type {}'.format(type_name))
+    def validate(self, value):
+        """ Validate the value type and apply the rules """
+        if not self._validate_type(value):
+            raise ValidationError(errors=[TypeError(self, value)])
+        if not self.is_null(value):
+            rule_errors = self._validate_rules(value)
+            if rule_errors:
+                raise ValidationError(errors=rule_errors)
+        if not self.nullable:
+            raise ValidationError(errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+
+    def _validate_rules(self, value) -> List[RuleError]:
+        """ Validate the value against the rules """
+        rule_errors = []
+        for rule in self.rules:
+            try:
+                rule.apply(value)
+            except RuleError as e:
+                rule_errors.append(e)
+        return rule_errors
+
+    @abstractmethod
+    def _validate_type(self, value) -> bool:
+        """ Validate the value type """

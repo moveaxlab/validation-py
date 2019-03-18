@@ -1,35 +1,39 @@
-from .array import Array
-from .base64 import Base64
-from .base64file import Base64EncodedFile
-from .base58 import Base58
-from .boolean import Boolean
-from .email import Email
-from .float import Float
-from .integer import Integer
-from .iso8601date import ISO_8601_Date
-from .object import Object
-from .phone import Phone
-from .sequence import Sequence
-from .string import String
-from .url import URL
-from .uuid import UUID
-
+from .array import ArrayType
+from .base58 import Base58Type
+from .base64 import Base64Type
+from .base64file import Base64EncodedFileType
+from .boolean import BooleanType
+from .composite import CompositeType
+from .email import EmailType
+from .float import FloatType
+from .integer import IntegerType
+from .iso8601date import ISO8601DateType
+from .jwt import JWTType
+from .object import ObjectType
+from .phone import PhoneType
+from .sequence import SequenceType
+from .string import StringType
 from .type import Type
+from .url import URLType
+from .uuid import UUIDType
+from ..constants.types import *
 
 types = {
-    'array': Array,
-    'base64': Base64,
-    'base64_encoded_file': Base64EncodedFile,
-    'base58': Base58,
-    'boolean': Boolean,
-    'email': Email,
-    'float': Float,
-    'integer': Integer,
-    'ISO_8601_date': ISO_8601_Date,
-    'object': Object,
-    'phone': Phone,
-    'sequence': Sequence,
-    'string': String,
-    'url': URL,
-    'uuid': UUID,
+    ARRAY: ArrayType,
+    BASE58: Base58Type,
+    BASE64: Base64Type,
+    BASE64_ENCODED_FILE: Base64EncodedFileType,
+    BOOLEAN: BooleanType,
+    COMPOSITE: CompositeType,
+    EMAIL: EmailType,
+    FLOAT: FloatType,
+    INTEGER: IntegerType,
+    ISO_8601_DATE: ISO8601DateType,
+    JWT: JWTType,
+    OBJECT: ObjectType,
+    PHONE: PhoneType,
+    SEQUENCE: SequenceType,
+    STRING: StringType,
+    URL: URLType,
+    UUID: UUIDType,
 }

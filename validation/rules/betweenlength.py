@@ -4,7 +4,7 @@ from .rule import Rule
 class BetweenLengthRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'betweenlen'
 
     @classmethod

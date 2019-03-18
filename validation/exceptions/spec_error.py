@@ -1,2 +1,5 @@
+""" Spec Error """
+
+
 class SpecError(Exception):
-    pass
+    """ Error that occurs on spec parsing and Type and Rule instantiation """

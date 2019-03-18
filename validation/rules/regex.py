@@ -1,25 +1,21 @@
+""" Regex """
 import re
 
 from .rule import Rule
+from ..constants import rules
+from ..types import StringType
 
 
 class RegexRule(Rule):
+    supported_types = (StringType,)
 
     @staticmethod
-    def name():
-        return 'regex'
+    def name() -> str:
+        return rules.REGEX
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, regex=params_string, spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the regex does not match
+        return self.regex.search(value) is not None
 
-    def __init__(self, alias, regex, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.regex = re.compile(regex)
-
-    def apply(self, data):
-        match = self.regex.search(data)
-        return match is not None
-
-    def get_params(self):
-        return [self.regex.pattern]
+    def _sanitize_params(self):
+        self.regex = re.compile(self.params[0])

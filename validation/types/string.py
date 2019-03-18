@@ -1,19 +1,15 @@
-from .sequence import Sequence
+""" String """
+from .type import Type
+from ..constants import types
 
-from ..rules import AlphaNumRule, AlphaRule, AlphaDashRule, DecimalRule, HexRule, RegexRule
 
-
-class String(Sequence):
-
-    supported_rules = {AlphaNumRule, AlphaRule, AlphaDashRule, DecimalRule, HexRule, RegexRule}
+class StringType(Type):
     null_values = ['']
 
     @staticmethod
-    def name():
-        return 'string'
+    def name() -> str:
+        return types.STRING
 
     @classmethod
-    def check(cls, value):
-        if not super(String, cls).check(value):
-            return False
+    def _validate_type(cls, value) -> bool:
         return isinstance(value, str)

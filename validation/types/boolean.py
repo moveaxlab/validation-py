@@ -1,16 +1,13 @@
+""" Boolean """
 from .type import Type
+from ..constants import types
 
-from ..rules import MustBeTrueRule
 
-
-class Boolean(Type):
-
-    supported_rules = {MustBeTrueRule}
-
+class BooleanType(Type):
     @staticmethod
-    def name():
-        return 'boolean'
+    def name() -> str:
+        return types.BOOLEAN
 
     @classmethod
-    def check(cls, value):
+    def _validate_type(cls, value) -> bool:
         return isinstance(value, bool)

@@ -4,7 +4,7 @@ from .rule import Rule
 class LengthRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'len'
 
     @classmethod

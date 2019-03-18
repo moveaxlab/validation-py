@@ -6,7 +6,7 @@ from ..utils.base64file_utils import get_type
 class FileTypeRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'file_type'
 
     @classmethod

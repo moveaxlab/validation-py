@@ -4,7 +4,7 @@ from .rule import Rule
 class NullableIfRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'nullable_if'
 
     @classmethod

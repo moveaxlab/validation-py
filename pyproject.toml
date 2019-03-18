@@ -1,0 +1,10 @@
+[tool.poetry]
+name = "validation-python"
+version = "1.2.0"
+description = ""
+authors = ["michelle.laurenti@chainside.net",
+           "mattias.mignone@moveax.it"]
+
+[tool.poetry.dependencies]
+phonenumbers = "^8.10"
+python-dateutil = "^2.7.3"

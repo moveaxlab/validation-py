@@ -6,7 +6,7 @@ from .rule import Rule
 class AlphaDashRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'alphadash'
 
     def apply(self, data):

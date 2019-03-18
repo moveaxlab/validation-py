@@ -1,16 +1,17 @@
+""" Alpha """
 import string
 
 from .rule import Rule
+from ..constants import rules
 
 
 class AlphaRule(Rule):
-
-    @staticmethod
-    def name():
-        return 'alpha'
-
-    def apply(self, data):
-        for c in data:
-            if c not in string.ascii_letters:
+    def apply(self, value) -> bool:
+        for char in value:
+            if char not in string.ascii_letters:
                 return False
         return True
+
+    @staticmethod
+    def name() -> str:
+        return rules.ALPHA

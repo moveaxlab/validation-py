@@ -6,7 +6,7 @@ from .rule import Rule
 class DecimalRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'decimal'
 
     def apply(self, data):

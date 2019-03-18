@@ -4,16 +4,19 @@ from .rule import Rule
 class MaxRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'max'
+
+    def _abides_by_the_rule(self, value) -> bool:
+        pass
 
     @classmethod
     def parse(cls, alias, spec, params_string):
         return cls(alias=alias, maximum=int(params_string), spec=spec)
 
-    def __init__(self, alias, maximum, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.max = maximum
+    # def __init__(self, alias, maximum, spec):
+    #     super().__init__(alias=alias, spec=spec)
+    #     self.max = maximum
 
     def apply(self, data):
         return data <= self.max

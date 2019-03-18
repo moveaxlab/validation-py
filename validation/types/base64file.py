@@ -1,27 +1,25 @@
+""" Base64 File """
 import re
 
-from .string import String
+from .string import StringType
+from ..constants import types
 
-from ..rules import FileFormatRule, FileTypeRule, MaxSizeRule, MinSizeRule
+# Constants
+BASE64_FILE_RE = re.compile(
+    r'^'  # beginning of string
+    r'data:[a-z]+/[a-z]+;base64,'
+    r'(?:[A-Za-z0-9+/]{4})*'
+    r'(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
+    r'$')  # end of string
 
 
-class Base64EncodedFile(String):
-
-    supported_rules = {FileFormatRule, FileTypeRule, MaxSizeRule, MinSizeRule}
-
+class Base64EncodedFileType(StringType):
     @staticmethod
-    def name():
-        return 'base64_encoded_file'
+    def name() -> str:
+        return types.BASE64_ENCODED_FILE
 
     @classmethod
-    def check(cls, value):
-        if not super(Base64EncodedFile, cls).check(value):
+    def _validate_type(cls, value) -> bool:
+        if not super()._validate_type(value):
             return False
-        regex = re.compile(
-            r'^'
-            r'data:[a-z]+/[a-z]+;base64,'
-            r'(?:[A-Za-z0-9+/]{4})*'
-            r'(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
-            r'$'
-        )
-        return regex.match(value) is not None
+        return BASE64_FILE_RE.match(value) is not None

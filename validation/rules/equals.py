@@ -4,7 +4,7 @@ from .rule import Rule
 class EqualsRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'equals'
 
     @classmethod

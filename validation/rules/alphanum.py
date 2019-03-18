@@ -6,7 +6,7 @@ from .rule import Rule
 class AlphaNumRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'alphanum'
 
     def apply(self, data):

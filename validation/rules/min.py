@@ -4,7 +4,7 @@ from .rule import Rule
 class MinRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'min'
 
     @classmethod

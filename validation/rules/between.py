@@ -4,8 +4,11 @@ from .rule import Rule
 class BetweenRule(Rule):
 
     @staticmethod
-    def name():
+    def name() -> str:
         return 'between'
+
+    def _abides_by_the_rule(self, value) -> bool:
+        pass
 
     @classmethod
     def parse(cls, alias, spec, params_string):
