@@ -13,6 +13,6 @@ class ObjectValidationError(ValidationError):
             'schema_errors': {
                 key: {
                     'errors': [err.to_json() for err in errors]
-                } for key, errors in self.schema_errors
+                } for key, errors in self.schema_errors.items()
             }
         }

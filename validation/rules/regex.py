@@ -7,6 +7,7 @@ from ..types import StringType
 
 
 class RegexRule(Rule):
+    required_params = 1
     supported_types = (StringType,)
 
     @staticmethod

@@ -6,7 +6,9 @@ from ..exceptions import RuleError, SpecError
 
 
 class Rule(ABC):
-    # Supported types: a tuple of Types to which the rule applies
+    # Amount of params expected by the Rule. None disables check.
+    required_params = None
+    # Tuple of Types to which the rule applies
     supported_types = ()
 
     def __init__(self, type, alias: Optional[str] = None, params: Optional[List[str]] = None):
@@ -38,10 +40,15 @@ class Rule(ABC):
 
     def _check_params(self):
         """ Check the params are valid """
+        if self.required_params is not None:
+            if self.required_params != len(self.params):
+                raise SpecError(f'The "{self.name()} rule expects {self.required_params} parameters."')
         try:
             self._sanitize_params()
+        except SpecError as e:
+            raise e
         except Exception:
-            raise SpecError(f'The params {self.params} passed to the rule {self.name()} are invalid')
+            raise SpecError(f'The params {self.params} passed to the rule {self.name()} are invalid.')
 
     def _check_type(self):
         """ Check the type is supported """

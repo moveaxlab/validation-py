@@ -18,6 +18,8 @@ class MetaType(ABCMeta):
 
 
 class Type(metaclass=MetaType):
+    # Should validate nested types?
+    nested_validation = False
     # List of NULL equivalent values for the Type
     null_values = [None]
 
@@ -61,5 +63,5 @@ class Type(metaclass=MetaType):
 
     @classmethod
     @abstractmethod
-    def _validate_type(value) -> bool:
+    def _validate_type(cls, value) -> bool:
         """ Validate the value type """

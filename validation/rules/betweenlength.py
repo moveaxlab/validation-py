@@ -5,6 +5,7 @@ from ..types import SequenceType, StringType
 
 
 class BetweenLengthRule(Rule):
+    required_params = 2
     supported_types = (SequenceType, StringType,)
 
     @staticmethod
@@ -17,3 +18,5 @@ class BetweenLengthRule(Rule):
 
     def _sanitize_params(self):
         self.min, self.max = self.params
+        self.max = int(self.max)
+        self.min = int(self.min)

@@ -5,6 +5,7 @@ from ..types import FloatType, IntegerType
 
 
 class MinRule(Rule):
+    required_params = 1
     supported_types = (FloatType, IntegerType,)
 
     @staticmethod

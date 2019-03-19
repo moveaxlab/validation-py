@@ -6,6 +6,7 @@ from ..utils.base64file_utils import get_size
 
 
 class MaxSizeRule(Rule):
+    required_params = 1
     supported_types = (Base64EncodedFileType,)
 
     @staticmethod

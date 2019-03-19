@@ -5,6 +5,7 @@ from ..types import Type
 
 
 class NullableRule(Rule):
+    required_params = 0
     supported_types = (Type,)
 
     @staticmethod
@@ -12,4 +13,4 @@ class NullableRule(Rule):
         return rules.NULLABLE
 
     def _abides_by_the_rule(self, value) -> bool:
-        pass
+        raise NotImplementedError

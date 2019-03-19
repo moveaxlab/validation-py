@@ -5,6 +5,7 @@ from ..types import FloatType, IntegerType
 
 
 class BetweenRule(Rule):
+    required_params = 2
     supported_types = (FloatType, IntegerType,)
 
     @staticmethod
@@ -17,3 +18,5 @@ class BetweenRule(Rule):
 
     def _sanitize_params(self):
         self.min, self.max = self.params
+        self.max = float(self.max)
+        self.min = float(self.min)

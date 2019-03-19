@@ -3,11 +3,11 @@ from decimal import Decimal
 
 from .rule import Rule
 from ..constants import rules
-from ..exceptions import SpecError
 from ..types import StringType
 
 
 class DecimalRule(Rule):
+    required_params = 0
     supported_types = (StringType,)
 
     @staticmethod
@@ -21,7 +21,3 @@ class DecimalRule(Rule):
             return True
         except Exception:
             return False
-
-    def _sanitize_params(self):
-        if self.params:
-            raise SpecError(f'The DecimalRule takes no parameters')

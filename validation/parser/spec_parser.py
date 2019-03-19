@@ -52,23 +52,19 @@ class SpecParser:
                 ll_spec['schema'][key] = cls.parse(hl_spec['schema'][key])
             if required_keys:
                 # Add 'required' rule to top level object
-                ll_spec['rules'].append({
-                    'name': rules.REQUIRED,
-                    'params': required_keys
-                })
+                ll_spec['rules'].append({'name': rules.REQUIRED, 'params': required_keys})
         return ll_spec
 
     @staticmethod
     def __parse_rule(hl_rule: str) -> dict:
         """ Parse a rule from string format to dict format """
-        name, *params = hl_rule.split(NAME_PARAM_SEP, maxsplit=1)
-        match = ALIAS_RE.fullmatch(name)
-        if match is not None:
-            name = match.group('name')
-            alias = match.group('alias')
-        else:
-            raise ValueError(f"""Rule "{hl_rule}" is formatted incorrectly.\n
-                                 Rules must have the following format: {RULE_FMT}""")
+        name_alias, *params = hl_rule.split(NAME_PARAM_SEP, maxsplit=1)
+        match = ALIAS_RE.fullmatch(name_alias)
+        if match is None:
+            raise SpecError(f"""Rule "{hl_rule}" is formatted incorrectly.\n
+                                Rules must have the following format: {RULE_FMT}""")
+        name = match.group('name')
+        alias = match.group('alias')
         ll_rule = {'name': name}
         if alias:
             ll_rule['alias'] = alias
@@ -83,9 +79,9 @@ class SpecParser:
     def __parse_rules(cls, hl_rules) -> list:
         """ Parse a high-level rule group """
         if isinstance(hl_rules, str):
-            splitted_rules = hl_rules.split(RULE_SEP)
+            split_rules = hl_rules.split(RULE_SEP)
         else:
-            splitted_rules = hl_rules
+            split_rules = hl_rules
         # Filter out 'required' rule
         # Parse every rule
-        return [cls.__parse_rule(rule) for rule in splitted_rules if rules.REQUIRED not in rule]
+        return [cls.__parse_rule(rule) for rule in split_rules if rules.REQUIRED not in rule]

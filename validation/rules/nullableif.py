@@ -5,6 +5,7 @@ from ..types import ObjectType
 
 
 class NullableIfRule(Rule):
+    required_params = 2
     supported_types = (ObjectType,)
 
     @staticmethod

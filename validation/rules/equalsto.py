@@ -5,6 +5,7 @@ from ..types import ObjectType
 
 
 class EqualsToRule(Rule):
+    required_params = 2
     supported_types = (ObjectType,)
 
     @staticmethod

@@ -5,6 +5,7 @@ from ..types import SequenceType, StringType
 
 
 class MaxLengthRule(Rule):
+    required_params = 1
     supported_types = (SequenceType, StringType,)
 
     @staticmethod
