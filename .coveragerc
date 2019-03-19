@@ -1,0 +1,9 @@
+[report]
+exclude_lines = def __str__
+                def name()
+                raise NotImplementedError
+show_missing = True
+
+[run]
+branch = True
+source = ./validation/
