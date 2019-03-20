@@ -27,7 +27,7 @@ class SpecParser:
             # Parse top level rules
             ll_rules = cls.__parse_rules(hl_spec['rules'])
             ll_spec = {
-                'nullable': 'nullable' in [rule['name'] for rule in ll_rules],
+                'nullable': 'nullable' in [rule['name'] for rule in ll_rules],  # From Nullable rule to spec attribute
                 'rules': [rule for rule in ll_rules if rule['name'] != 'nullable'],  # Filter out 'nullable' rule
                 'type': hl_spec['type']
             }
