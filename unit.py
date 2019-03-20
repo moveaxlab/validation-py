@@ -33,11 +33,13 @@ class TestTypes(TestCase):
 
     def test_array_without_nested_validation(self):
         value = [5]
-        self.assertIsNone(ValidatorFactory.make({"rules": ["betweenlen:1,3"], "type": types.ARRAY}).validate(value))
+        self.assertIsNone(ValidatorFactory.make({"rules": [f"{rules.BETWEENLEN}:1,3"],
+                                                 "type": types.ARRAY}).validate(value))
 
     def test_object_without_nested_validation(self):
         value = {'a': 1, 'b': 1}
-        self.assertIsNone(ValidatorFactory.make({"rules": ["equals_to:a,b"], "type": types.OBJECT}).validate(value))
+        self.assertIsNone(ValidatorFactory.make({"rules": [f"{rules.EQUALS_TO}:a,b"],
+                                                 "type": types.OBJECT}).validate(value))
 
     def test_unknown_type(self):
         with self.assertRaises(SpecError, msg='Validator should not accept unknown types'):
@@ -107,15 +109,18 @@ class TestExceptions(TestCase):
         except ArrayValidationError as e:
             self.assertDictEqual(e.to_json(), expected_output)
 
-    def test_object_validation_error_output(self):
+    def test_object_validation_error_legacy_output_with_required_error(self):
         self.maxDiff = None
         string_value = "some r4nd0m string"
         value = {"a": string_value}
         expected_output = {
-            "errors": [{"name": rules.REQUIRED, "params": ['b'], "value": value}],
+            "errors": [],
             "schema_errors": {
                 "a": {
                     "errors": [{"name": rules.ALPHA, "params": [], "value": string_value}]
+                },
+                "b": {
+                    "errors": [{"name": rules.REQUIRED, "params": "b", "value": None}]
                 }
             }
         }
@@ -130,16 +135,31 @@ class TestExceptions(TestCase):
         except ObjectValidationError as e:
             self.assertDictEqual(e.to_json(), expected_output)
 
-    def test_type_error_output(self):
+    def test_object_validation_error_legacy_output_without_required_error(self):
+        self.maxDiff = None
         string_value = "some r4nd0m string"
-        expected_output = {'name': StringType.name(), 'value': string_value}
-        self.assertDictEqual(TypeError(StringType, string_value).to_json(), expected_output)
+        value = {"a": string_value}
+        expected_output = {
+            "errors": [{"name": rules.EQUALS_TO, "params": ["a", "b"], "value": value}],
+            "schema_errors": {
+                "a": {"errors": [{"name": types.FLOAT, "value": string_value}]}
+            }
+        }
+        try:
+            ValidatorFactory.make({
+                "rules": [f"{rules.EQUALS_TO}:a,b"],
+                "schema": {
+                    "a": {"rules": [], "type": types.FLOAT}
+                },
+                "type": types.OBJECT}).validate(value)
+        except ObjectValidationError as e:
+            self.assertDictEqual(e.to_json(), expected_output)
 
 
 class TestRules(TestCase):
     def test_param_amount_check_rules(self):
         with self.assertRaises(SpecError, msg=f'AlphaRule should not accept parameters'):
-            ValidatorFactory.make({"rules": "alpha:param", "type": "string"})
+            ValidatorFactory.make({"rules": f"{rules.ALPHA}:param", "type": types.STRING})
 
     def test_param_required_self_check_rules(self):
         rule_schema = {
@@ -169,19 +189,19 @@ class TestRules(TestCase):
 
     def test_betweenlen_rule_param_validation(self):
         with self.assertRaises(SpecError, msg='BetweenLenRule should accept only int-type parameters'):
-            ValidatorFactory.make({"rules": ["betweenlen:1,3.5"], "type": "string"})
+            ValidatorFactory.make({"rules": [f"{rules.BETWEENLEN}:1,3.5"], "type": types.STRING})
 
     def test_len_rule_with_incorrect_params(self):
         with self.assertRaises(SpecError, msg='LenRule should accept only int-type params'):
-            ValidatorFactory.make({"rules": ["len:3.6"], "type": "string"})
+            ValidatorFactory.make({"rules": [f"{rules.LEN}:3.6"], "type": types.STRING})
 
     def test_rule_not_supported_by_type(self):
         with self.assertRaises(SpecError, msg='Rules should check supported types'):
-            ValidatorFactory.make({"rules": ["must_be_true"], "type": "array"})
+            ValidatorFactory.make({"rules": [rules.MUST_BE_TRUE], "type": types.ARRAY})
 
     def test_unknown_rule(self):
         with self.assertRaises(SpecError, msg='Validator should not accept unknown rules'):
-            ValidatorFactory.make({"rules": ["unknown_rule:1,gd"], "type": "object"})
+            ValidatorFactory.make({"rules": ["unknown_rule:1,gd"], "type": types.OBJECT})
 
     def test_inherited_supported_types(self):
         self.assertIsNotNone(ValidatorFactory.make({"rules": ["alphanum"], "type": "email"}),
@@ -202,13 +222,15 @@ class TestSpecParser(TestCase):
 
     def test_nested_array_spec_rules_parsing(self):
         parsed_ll_spec = SpecParser.parse({"rules": [f"{rules.MAX}:100", rules.NULLABLE], "type": types.ARRAY,
-                                           "elements": {"rules": [f"{rules.MAXLEN}:100", rules.NULLABLE], "type": types.STRING}})
+                                           "elements": {"rules": [f"{rules.MAXLEN}:100", rules.NULLABLE],
+                                                        "type": types.STRING}})
         self.assertListEqual(parsed_ll_spec['elements']['rules'], [{'name': rules.MAXLEN, 'params': ['100']}],
                              'Nested array rules are not parsed correctly')
 
     def test_nested_object_spec_rules_parsing(self):
         parsed_ll_spec = SpecParser.parse({"rules": [f"{rules.MAX}:100", rules.NULLABLE], "type": types.OBJECT,
-                                           "schema": {"a": {"rules": [f"{rules.MAXLEN}:100", "nullable"], "type": types.STRING}}})
+                                           "schema": {"a": {"rules": [f"{rules.MAXLEN}:100", rules.NULLABLE],
+                                                            "type": types.STRING}}})
         self.assertListEqual(parsed_ll_spec['schema']['a']['rules'], [{'name': rules.MAXLEN, 'params': ['100']}],
                              'Nested object rules are not parsed correctly')
 
@@ -242,9 +264,11 @@ class TestSpecParser(TestCase):
 
     def test_required_rule_parsing(self):
         parsed_ll_spec = SpecParser.parse({"rules": [rules.NULLABLE], "type": types.OBJECT,
-                                           "schema": {"a": {"rules": [rules.REQUIRED, rules.NULLABLE], "type": types.STRING},
+                                           "schema": {"a": {"rules": [rules.REQUIRED, rules.NULLABLE],
+                                                            "type": types.STRING},
                                                       "b": {"rules": [rules.NULLABLE], "type": types.STRING},
-                                                      "c": {"rules": f"{rules.REQUIRED}|{rules.NULLABLE}", "type": types.FLOAT}}})
+                                                      "c": {"rules": f"{rules.REQUIRED}|{rules.NULLABLE}",
+                                                            "type": types.FLOAT}}})
         self.assertEqual(parsed_ll_spec['rules'][-1]['name'],
                          'required', 'Required is not a top level rule')
         self.assertEqual(parsed_ll_spec['rules'][-1]['params'],
