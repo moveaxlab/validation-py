@@ -204,7 +204,7 @@ class TestRules(TestCase):
             ValidatorFactory.make({"rules": ["unknown_rule:1,gd"], "type": types.OBJECT})
 
     def test_inherited_supported_types(self):
-        self.assertIsNotNone(ValidatorFactory.make({"rules": ["alphanum"], "type": "email"}),
+        self.assertIsNotNone(ValidatorFactory.make({"rules": [rules.ALPHANUM], "type": types.EMAIL}),
                              'The supported types are not inherited correctly.')
 
 
