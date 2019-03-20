@@ -15,5 +15,6 @@ class AlphaDashRule(Rule):
         return rules.ALPHADASH
 
     def _abides_by_the_rule(self, value: str) -> bool:
-        # Fail when the value has non alphabetic characters or has special chars other than "-" and "_".
-        return all(char in string.ascii_letters + '-_' for char in value)
+        # Fail when the value has non alphanumeric characters other than "-" and "_".
+        possible_chars = string.ascii_letters + string.digits + '-_'
+        return all(char in possible_chars for char in value)
