@@ -1,4 +1,4 @@
-# Validation library
+# Validation library [![Build Status](https://travis-ci.com/moveaxlab/validation-py.svg?branch=master)](https://travis-ci.com/moveaxlab/validation-py)
 
 ## Setup environment and install dependencies:
 - Development: `poetry install`
