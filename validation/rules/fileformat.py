@@ -19,5 +19,5 @@ class FileFormatRule(Rule):
 
     def _sanitize_params(self):
         if not self.params:
-            raise SpecError(f'At least one file format is required')
+            raise SpecError('At least one file format is required')
         self.formats = self.params

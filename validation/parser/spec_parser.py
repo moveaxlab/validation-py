@@ -15,7 +15,7 @@ ALIAS_RE = re.compile(r"""
 """, re.VERBOSE)
 NAME_PARAM_SEP = ':'
 PARAMS_SEP = ','
-RULE_FMT = f'name[alias]{NAME_PARAM_SEP}param1{PARAMS_SEP}param2{PARAMS_SEP}param3'
+RULE_FMT = 'name[alias]{}param1{}param2{}param3'.format(NAME_PARAM_SEP, PARAMS_SEP, PARAMS_SEP)
 RULE_SEP = '|'
 
 
@@ -32,17 +32,17 @@ class SpecParser:
                 'type': hl_spec['type']
             }
         except KeyError as e:
-            raise SpecError(f'The key "{e.args[0]}" is required.')
+            raise SpecError('The key "{}" is required.'.format(e.args[0]))
         if 'elements' in hl_spec:
             # Validate that the 'elements' key is used only inside an 'array' type spec
             if hl_spec['type'] != types.ARRAY:
-                raise SpecError(f'Only "{types.ARRAY}" structures must define "elements"')
+                raise SpecError('Only "{}" structures must define "elements"'.format(types.ARRAY))
             # Parse nested spec recursively
             ll_spec['elements'] = cls.parse(hl_spec['elements'])
         if 'schema' in hl_spec:
             # Validate that the 'schema' key is used only inside an 'object' type spec
             if hl_spec['type'] != types.OBJECT:
-                raise SpecError(f'Only "{types.OBJECT}" structures must define a "schema"')
+                raise SpecError('Only "{}" structures must define a "schema"'.format(types.OBJECT))
             ll_spec['schema'] = {}
             required_keys = []
             for key, nested_spec in hl_spec['schema'].items():
@@ -61,8 +61,8 @@ class SpecParser:
         name_alias, *params = hl_rule.split(NAME_PARAM_SEP, maxsplit=1)
         match = ALIAS_RE.fullmatch(name_alias)
         if match is None:
-            raise SpecError(f"""Rule "{hl_rule}" is formatted incorrectly.\n
-                                Rules must have the following format: {RULE_FMT}""")
+            raise SpecError("""Rule "{}" is formatted incorrectly.\n
+                                Rules must have the following format: {}""".format(hl_rule, RULE_FMT))
         name = match.group('name')
         alias = match.group('alias')
         ll_rule = {'name': name}

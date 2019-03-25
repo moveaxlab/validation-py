@@ -42,18 +42,18 @@ class Rule(ABC):
         """ Check the params are valid """
         if self.required_params is not None:
             if self.required_params != len(self.params):
-                raise SpecError(f'The "{self.name()} rule expects {self.required_params} parameters."')
+                raise SpecError('The "{} rule expects {} parameters."'.format(self.name(), self.required_params))
         try:
             self._sanitize_params()
         except SpecError as e:
             raise e
         except Exception:
-            raise SpecError(f'The params {self.params} passed to the rule {self.name()} are invalid.')
+            raise SpecError('The params {} passed to the rule {} are invalid.'.format(self.params, self.name()))
 
     def _check_type(self):
         """ Check the type is supported """
         if not issubclass(self.type.__class__, self.supported_types):
-            raise SpecError(f'The rule "{self.name()}" does not support the type {self.type.name()}')
+            raise SpecError('The rule "{}" does not support the type {}'.format(self.name(), self.type.name()))
 
     def _sanitize_params(self):
         """

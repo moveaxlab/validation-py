@@ -18,5 +18,5 @@ class InRule(Rule):
 
     def _sanitize_params(self):
         if not self.params:
-            raise SpecError(f'At least one parameter is required')
+            raise SpecError('At least one parameter is required')
         self.targets = self.params

@@ -13,5 +13,5 @@ class RuleFactory:
         try:
             rule = rules[name]
         except KeyError as e:
-            raise SpecError(f'Unknown rule "{e.args[0]}"')
+            raise SpecError('Unknown rule "{}"'.format(e.args[0]))
         return rule(alias=alias, params=params, type=type)

@@ -10,5 +10,5 @@ class TypeFactory:
         try:
             type_validator = types[spec['type']]
         except KeyError as e:
-            raise SpecError(f'Unknown type "{e.args[0]}"')
+            raise SpecError('Unknown type "{}"'.format(e.args[0]))
         return type_validator(spec)

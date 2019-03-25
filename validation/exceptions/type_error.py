@@ -9,7 +9,7 @@ class TypeError(BaseError):
         self.value = value
 
     def __str__(self) -> str:
-        return f'{self.value} is not type {self.type_name}'
+        return '{} is not type {}'.format(self.value, self.type_name)
 
     @staticmethod
     def name() -> str:

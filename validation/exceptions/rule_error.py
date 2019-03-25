@@ -11,9 +11,9 @@ class RuleError(BaseError):
 
     def __str__(self):
         if self.params:
-            self.msg = f'{self.value} does not abide by the rule {self.rule_name} with params {self.params}'
+            self.msg = '{} does not abide by the rule {} with params {}'.format(self.value, self.rule_name, self.params)
         else:
-            self.msg = f'{self.value} does not abide by the rule {self.rule_name}'
+            self.msg = '{} does not abide by the rule {}'.format(self.value, self.rule_name)
 
     @staticmethod
     def name() -> str:
