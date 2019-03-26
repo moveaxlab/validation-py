@@ -25,6 +25,10 @@ class Rule(ABC):
         if not self._abides_by_the_rule(value):
             raise RuleError(self, value)
 
+    def get_alias(self):
+        """ Getter for alias """
+        return self.alias
+
     def get_failure_params(self, value) -> List[str]:
         """ Getter for params on validation failure """
         return self.params

@@ -48,6 +48,24 @@
     "m": {
       "rules": "required|min:-2",
       "type": "float"
+    },
+    "n": {
+      "elements": {
+          "rules": "maxlen:20|nullable",
+          "type": "string"
+      },
+      "rules": ["maxlen:100", "nullable"],
+      "type": "array"
+    },
+    "o": {
+      "schema": {
+        "endpoint": {
+          "rules": ["maxlen:20", "nullable", "regex[protocol]:^(?:http|ftp)s?://"],
+          "type": "url"
+        }
+      },
+      "rules": [],
+      "type": "object"
     }
   },
   "type": "object"

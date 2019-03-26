@@ -6,7 +6,7 @@ class RuleError(BaseError):
     """ Error that occurs on Rule validation """
     def __init__(self, rule, value):
         self.params = rule.get_failure_params(value)
-        self.rule_name = rule.name()
+        self.rule_name = rule.get_alias()
         self.value = value
 
     def __str__(self):

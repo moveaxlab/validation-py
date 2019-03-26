@@ -114,6 +114,48 @@
         }
       ],
       "type": "float"
+    },
+    "n": {
+      "elements": {
+        "nullable": true,
+        "rules": [
+          {
+            "name": "maxlen",
+            "params": ["20"]
+          }
+        ],
+        "type": "string"
+      },
+      "nullable": true,
+      "rules": [
+        {
+          "name": "maxlen",
+          "params": ["100"]
+        }
+      ],
+      "type": "array"
+    },
+    "o": {
+      "nullable": false,
+      "rules": [],
+      "schema": {
+        "endpoint": {
+          "nullable": true,
+          "rules": [
+            {
+              "name": "maxlen",
+              "params": ["20"]
+            },
+            {
+              "alias": "protocol",
+              "name": "regex",
+              "params": ["^(?:http|ftp)s?://"]
+            }
+          ],
+          "type": "url"
+        }
+      },
+      "type": "object"
     }
   },
   "type": "object"

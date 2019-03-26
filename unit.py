@@ -209,27 +209,6 @@ class TestSpecParser(TestCase):
         parsed_ll_spec = SpecParser.parse({"rules": rules.NULLABLE, "type": types.INTEGER})
         self.assertListEqual(parsed_ll_spec['rules'], [], 'Nullable rule was not removed')
 
-    def test_single_level_rules_parsing(self):
-        parsed_ll_spec = SpecParser.parse({"rules": ["{}:100,150".format(rules.BETWEEN), "{}:3".format(rules.MIN), rules.NULLABLE],
-                                           "type": types.INTEGER})
-        self.assertListEqual(parsed_ll_spec['rules'], [{'name': rules.BETWEEN, 'params': ['100', '150']},
-                                                       {'name': rules.MIN, 'params': ['3']}],
-                             'Single level rules parsed incorrectly')
-
-    def test_nested_array_spec_rules_parsing(self):
-        parsed_ll_spec = SpecParser.parse({"rules": ["{}:100".format(rules.MAX), rules.NULLABLE], "type": types.ARRAY,
-                                           "elements": {"rules": ["{}:100".format(rules.MAXLEN), rules.NULLABLE],
-                                                        "type": types.STRING}})
-        self.assertListEqual(parsed_ll_spec['elements']['rules'], [{'name': rules.MAXLEN, 'params': ['100']}],
-                             'Nested array rules are not parsed correctly')
-
-    def test_nested_object_spec_rules_parsing(self):
-        parsed_ll_spec = SpecParser.parse({"rules": ["{}:100".format(rules.MAX), rules.NULLABLE], "type": types.OBJECT,
-                                           "schema": {"a": {"rules": ["{}:100".format(rules.MAXLEN), rules.NULLABLE],
-                                                            "type": types.STRING}}})
-        self.assertListEqual(parsed_ll_spec['schema']['a']['rules'], [{'name': rules.MAXLEN, 'params': ['100']}],
-                             'Nested object rules are not parsed correctly')
-
     def test_parsing_incorrect_rule_format(self):
         with self.assertRaises(SpecError, msg='The parser incorrectly accepted a rule'):
             SpecParser.parse({"rules": ["{}<123>".format(rules.BETWEEN)], "type": types.STRING})
@@ -241,12 +220,6 @@ class TestSpecParser(TestCase):
     def test_parsing_no_type_submitted(self):
         with self.assertRaises(SpecError, msg='The key "type" is required.'):
             SpecParser.parse({"rules": "{}:10|{}".format(rules.MAX, rules.NULLABLE)})
-
-    def test_alias_usage(self):
-        alias = 'some_alias'
-        parsed_ll_spec = SpecParser.parse({"rules": "{}[{}]:10|{}".format(rules.MAXLEN, alias, rules.NULLABLE),
-                                           "type": types.STRING})
-        self.assertEqual(parsed_ll_spec['rules'][0]['alias'], alias)
 
     def test_parsing_incorrect_elements_usage(self):
         with self.assertRaises(SpecError, msg='Only "array" structures must define "elements"'):
