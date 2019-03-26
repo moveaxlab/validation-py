@@ -3,7 +3,8 @@ import os
 from unittest import TestCase, main
 
 from validation.constants import rules, types
-from validation.exceptions import ArrayValidationError, ObjectValidationError, SpecError, ValidationError
+from validation.exceptions import (ArrayValidationError, ObjectValidationError,
+                                   SpecError, ValidationError)
 from validation.parser import SpecParser
 from validation.types.type_factory import TypeFactory
 from validation.validator import ValidatorFactory
@@ -115,12 +116,8 @@ class TestExceptions(TestCase):
         expected_output = {
             "errors": [],
             "schema_errors": {
-                "a": {
-                    "errors": [{"name": rules.ALPHA, "params": [], "value": string_value}]
-                },
-                "b": {
-                    "errors": [{"name": rules.REQUIRED, "params": "b", "value": None}]
-                }
+                "a": {"errors": [{"name": rules.ALPHA, "params": [], "value": string_value}]},
+                "b": {"errors": [{"name": rules.REQUIRED}]}
             }
         }
         try:

@@ -23,13 +23,14 @@ class ObjectValidationError(ValidationError):
     @staticmethod
     def _legacy_output(output) -> dict:
         legacy_output = deepcopy(output)
-        required_error_obj = None
+        required_error = None
         for error in legacy_output['errors']:
             if error['name'] == rules.REQUIRED:
-                required_error_obj = error
+                required_error = error
                 for key in error['params']:
-                    required_error = {'name': 'required', 'params': key, 'value': None}
-                    legacy_output['schema_errors'][key] = {'errors': [required_error]}
-        if required_error_obj:
-            legacy_output['errors'].remove(required_error_obj)
+                    legacy_output['schema_errors'][key] = {
+                        'errors': [{'name': 'required'}]
+                    }
+        if required_error:
+            legacy_output['errors'].remove(required_error)
         return legacy_output
