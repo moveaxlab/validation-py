@@ -8,7 +8,6 @@ from .email import EmailType
 from .float import FloatType
 from .integer import IntegerType
 from .iso8601date import ISO8601DateType
-from .jwt import JWTType
 from .object import ObjectType
 from .phone import PhoneType
 from .sequence import SequenceType
@@ -29,7 +28,6 @@ types = {
     FLOAT: FloatType,
     INTEGER: IntegerType,
     ISO_8601_DATE: ISO8601DateType,
-    JWT: JWTType,
     OBJECT: ObjectType,
     PHONE: PhoneType,
     SEQUENCE: SequenceType,

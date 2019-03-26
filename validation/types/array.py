@@ -1,7 +1,7 @@
 """ Array """
 from .sequence import SequenceType
-from ..constants import rules, types
-from ..exceptions import ArrayValidationError, RuleError, ValidationError
+from ..constants import types
+from ..exceptions import ArrayValidationError, NullableError, ValidationError
 
 
 class ArrayType(SequenceType):
@@ -24,8 +24,7 @@ class ArrayType(SequenceType):
             # TODO: refactor to avoid duplication
             if self.is_null(value):
                 if not self.nullable:
-                    raise ValidationError(
-                        errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+                    raise ValidationError(errors=[NullableError(value)])
             else:
                 if not self._validate_type(value):
                     raise ValidationError(errors=[TypeError(self, value)])

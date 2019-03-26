@@ -7,7 +7,7 @@ from ..types import ObjectType
 class RequiredRule(Rule):
     supported_types = (ObjectType,)
 
-    def get_failure_params(self, value) -> set:
+    def get_failure_params(self, value) -> list:
         return list(self.keys - value.keys())
 
     @staticmethod

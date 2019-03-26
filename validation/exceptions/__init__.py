@@ -1,6 +1,7 @@
 from .array_validation_error import ArrayValidationError
 from .base_error import BaseError
 from .error import Error
+from .nullable_error import NullableError
 from .object_validation_error import ObjectValidationError
 from .rule_error import RuleError
 from .spec_error import SpecError

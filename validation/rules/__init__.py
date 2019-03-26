@@ -18,7 +18,6 @@ from .min import MinRule
 from .minlength import MinLengthRule
 from .minsize import MinSizeRule
 from .mustbetrue import MustBeTrueRule
-from .nullable import NullableRule
 from .nullableif import NullableIfRule
 from .regex import RegexRule
 from .required import RequiredRule
@@ -46,7 +45,6 @@ rules = {
     MIN_SIZE: MinSizeRule,
     MINLEN: MinLengthRule,
     MUST_BE_TRUE: MustBeTrueRule,
-    NULLABLE: NullableRule,
     NULLABLE_IF: NullableIfRule,
     REGEX: RegexRule,
     REQUIRED: RequiredRule,

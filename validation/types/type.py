@@ -2,8 +2,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import List
 
-from ..constants import rules
-from ..exceptions import RuleError, TypeError, ValidationError
+from ..exceptions import NullableError, RuleError, TypeError, ValidationError
 
 
 class MetaType(ABCMeta):
@@ -25,9 +24,8 @@ class Type(metaclass=MetaType):
 
     def __init__(self, spec: dict):
         from ..rules.rule_factory import RuleFactory
-        self.rule_factory = RuleFactory
         self.nullable = spec['nullable']
-        self.rules = [self.rule_factory.make(type=self, **rule) for rule in spec['rules']]
+        self.rules = [RuleFactory.make(type=self, **rule) for rule in spec['rules']]
 
     @classmethod
     def is_null(cls, value) -> bool:
@@ -43,7 +41,7 @@ class Type(metaclass=MetaType):
         """ Validate the value type and apply the rules """
         if self.is_null(value):
             if not self.nullable:
-                raise ValidationError(errors=[RuleError(self.rule_factory.make(name=rules.NULLABLE, type=self), value)])
+                raise ValidationError(errors=[NullableError(value)])
         else:
             if not self._validate_type(value):
                 raise ValidationError(errors=[TypeError(self, value)])

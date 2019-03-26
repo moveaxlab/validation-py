@@ -268,7 +268,7 @@ class TestSpecParser(TestCase):
         self.assertEqual(parsed_ll_spec['rules'][-1]['name'],
                          'required', 'Required is not a top level rule')
         self.assertSetEqual(set(parsed_ll_spec['rules'][-1]['params']),
-                            set(["a", "c"]), 'Not all required keys are listed')
+                            {"a", "c"}, 'Not all required keys are listed')
 
     def test_whole_parsing_example(self):
         self.maxDiff = None

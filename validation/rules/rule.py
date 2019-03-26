@@ -1,6 +1,6 @@
 """ Rule """
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Optional
+from typing import List, Optional
 
 from ..exceptions import RuleError, SpecError
 
@@ -25,7 +25,7 @@ class Rule(ABC):
         if not self._abides_by_the_rule(value):
             raise RuleError(self, value)
 
-    def get_failure_params(self, value) -> Iterable[str]:
+    def get_failure_params(self, value) -> List[str]:
         """ Getter for params on validation failure """
         return self.params
 
