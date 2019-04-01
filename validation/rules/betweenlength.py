@@ -1,24 +1,22 @@
+""" Between Length """
 from .rule import Rule
+from ..constants import rules
+from ..types import SequenceType, StringType
 
 
 class BetweenLengthRule(Rule):
+    required_params = 2
+    supported_types = (SequenceType, StringType,)
 
     @staticmethod
-    def name():
-        return 'betweenlen'
+    def name() -> str:
+        return rules.BETWEENLEN
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        minlen, maxlen = params_string.split(',')
-        return cls(alias=alias, minlen=int(minlen), maxlen=int(maxlen), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the length of the value goes beyond the [min, max] range.
+        return self.min <= len(value) <= self.max
 
-    def __init__(self, alias, minlen, maxlen, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.minlen = minlen
-        self.maxlen = maxlen
-
-    def apply(self, data):
-        return self.minlen <= len(data) <= self.maxlen
-
-    def get_params(self):
-        return [self.minlen, self.maxlen]
+    def _sanitize_params(self):
+        self.min, self.max = self.params
+        self.max = int(self.max)
+        self.min = int(self.min)

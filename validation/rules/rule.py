@@ -1,74 +1,66 @@
-import re
-from abc import ABCMeta, abstractmethod
+""" Rule """
+from abc import ABC, abstractmethod
+from typing import List, Optional
 
-from ..exceptions import UnknownRule
+from ..exceptions import RuleError, SpecError
 
 
-class IRule(metaclass=ABCMeta):
+class Rule(ABC):
+    # Amount of params expected by the Rule. None disables check.
+    required_params = None
+    # Tuple of Types to which the rule applies
+    supported_types = ()
+
+    def __init__(self, type, alias: Optional[str] = None, params: Optional[List[str]] = None):
+        # Set internal attributes
+        self.alias = alias or self.name()
+        self.params = params or []
+        self.type = type
+        # Validate rule
+        self._check_type()
+        self._check_params()
+
+    def apply(self, value):
+        """ Applies the rule to the value """
+        if not self._abides_by_the_rule(value):
+            raise RuleError(self, value)
+
+    def get_alias(self):
+        """ Getter for alias """
+        return self.alias
+
+    def get_failure_params(self, value) -> List[str]:
+        """ Getter for params on validation failure """
+        return self.params
 
     @staticmethod
     @abstractmethod
-    def name():
-        """Specifies the name of the rule"""
-
-    @classmethod
-    @abstractmethod
-    def parse(cls, alias, spec, params_string):
-        """Creates the rule from a descriptive string"""
+    def name() -> str:
+        """ Specifies the name of the rule """
 
     @abstractmethod
-    def apply(self, data):
-        """Applies the rule to the data"""
+    def _abides_by_the_rule(self, value) -> bool:
+        """ Check whether the value abides by the rule of not """
 
-
-class ARule(IRule, metaclass=ABCMeta):
-    pass
-
-
-class Rule(ARule, metaclass=ABCMeta):
-
-    NAME_PARAM_SEP = ':'
-    PARAMS_SEP = ','
-    ALIAS_RE = re.compile(r"""
-        ^                               # beginning of string
-        (?P<name>\w+)                   # group the rule name
-        (?:\[                           # if present, detect an alias between square brackets
-            (?P<alias>[^\]]+)           # group the alias
-        \])?
-        $                               # end of string
-    """, re.VERBOSE)
-    RULE_FMT = 'name[alias]{}param1{}param2{}param3'.format(NAME_PARAM_SEP, PARAMS_SEP, PARAMS_SEP)
-
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, spec=spec)
-
-    @classmethod
-    def create(cls, desc, spec):
-        from . import rules
-
-        name, *params = desc.split(cls.NAME_PARAM_SEP, maxsplit=1)
-        match = cls.ALIAS_RE.fullmatch(name)
-        if match is not None:
-            name = match.group('name')
-            if match.group('alias') is not None:
-                alias = match.group('alias')
-            else:
-                alias = name
-        else:
-            raise ValueError('Rule "{}" has wrong format. '
-                             'Rules must have the following format: {}'.format(desc, cls.RULE_FMT))
-
-        params = params[0] if params else None
-
+    def _check_params(self):
+        """ Check the params are valid """
+        if self.required_params is not None:
+            if self.required_params != len(self.params):
+                raise SpecError('The "{} rule expects {} parameters."'.format(self.name(), self.required_params))
         try:
-            return rules[name].parse(alias, spec, params)
-        except KeyError:
-            raise UnknownRule('No rule found with name {}'.format(name))
+            self._sanitize_params()
+        except SpecError as e:
+            raise e
+        except Exception:
+            raise SpecError('The params {} passed to the rule {} are invalid.'.format(self.params, self.name()))
 
-    def __init__(self, alias, spec):
-        self.alias = alias
-        self.spec = spec
+    def _check_type(self):
+        """ Check the type is supported """
+        if not issubclass(self.type.__class__, self.supported_types):
+            raise SpecError('The rule "{}" does not support the type {}'.format(self.name(), self.type.name()))
 
-    def get_params(self):
-        return []
+    def _sanitize_params(self):
+        """
+        Check params are valid and cast them to the appropriate type.
+        By default, nothing is done. But if a Rule requires it, this method should be overridden.
+        """

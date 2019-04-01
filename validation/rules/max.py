@@ -1,22 +1,20 @@
+""" Max """
 from .rule import Rule
+from ..constants import rules
+from ..types import FloatType, IntegerType
 
 
 class MaxRule(Rule):
+    required_params = 1
+    supported_types = (FloatType, IntegerType,)
 
     @staticmethod
-    def name():
-        return 'max'
+    def name() -> str:
+        return rules.MAX
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, maximum=int(params_string), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when value is greater than the target.
+        return float(value) <= self.target
 
-    def __init__(self, alias, maximum, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.max = maximum
-
-    def apply(self, data):
-        return data <= self.max
-
-    def get_params(self):
-        return [self.max]
+    def _sanitize_params(self):
+        self.target = float(self.params[0])

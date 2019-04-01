@@ -1,14 +1,13 @@
-from .float import Float
+""" Integer """
+from .type import Type
+from ..constants import types
 
 
-class Integer(Float):
+class IntegerType(Type):
+    @staticmethod
+    def name() -> str:
+        return types.INTEGER
 
     @staticmethod
-    def name():
-        return 'integer'
-
-    @classmethod
-    def check(cls, value):
-        if not super(Integer, cls).check(value):
-            return False
+    def _validate_type(value) -> bool:
         return isinstance(value, int)

@@ -1,17 +1,15 @@
-from .type import Type
+""" Object """
+from . import CompositeType
+from ..constants import types
 
-from ..rules import EqualsToRule, NullableIfRule, OperationalFieldRule
 
-
-class Object(Type):
-
-    supported_rules = {EqualsToRule, NullableIfRule, OperationalFieldRule}
-    null_values = [{}]
-
+class ObjectType(CompositeType):
     @staticmethod
-    def name():
-        return 'object'
+    def name() -> str:
+        return types.OBJECT
 
     @classmethod
-    def check(cls, value):
+    def _validate_type(cls, value) -> bool:
+        if not super()._validate_type(value):
+            return False
         return isinstance(value, dict)

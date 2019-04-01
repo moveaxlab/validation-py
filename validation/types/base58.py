@@ -1,16 +1,20 @@
+""" Base58 """
 import re
-from .string import String
+
+from .string import StringType
+from ..constants import types
+
+# Constants
+BASE58_RE = re.compile(r'^[1-9A-HJ-NP-Za-km-z]+$')
 
 
-class Base58(String):
-
+class Base58Type(StringType):
     @staticmethod
-    def name():
-        return 'base58'
+    def name() -> str:
+        return types.BASE58
 
     @classmethod
-    def check(cls, value):
-        if not super(Base58, cls).check(value):
+    def _validate_type(cls, value) -> bool:
+        if not super()._validate_type(value):
             return False
-        regex = re.compile(r'^[1-9A-HJ-NP-Za-km-z]+$')
-        return regex.match(value) is not None
+        return BASE58_RE.match(value) is not None

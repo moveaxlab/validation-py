@@ -1,0 +1,162 @@
+{
+  "nullable": true,
+  "rules": [
+    {
+      "name": "required",
+      "params": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "l", "m"]
+    }
+  ],
+  "schema": {
+    "a": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "minlen",
+          "params": ["8"]
+        }, {
+          "name": "maxlen",
+          "params": ["30"]
+        }, {
+          "name": "regex",
+          "params": ["[ab]+[cd]{2,4}"]
+        }
+      ],
+      "type": "string"
+    },
+    "b": {
+      "nullable": false,
+      "rules": [],
+      "type": "uuid"
+    },
+    "c": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "maxlen",
+          "params": ["40"]
+        }
+      ],
+      "type": "base64"
+    },
+    "d": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "maxlen",
+          "params": ["41"]
+        }
+      ],
+      "type": "base58"
+    },
+    "e": {
+      "nullable": false,
+      "rules": [],
+      "type": "boolean"
+    },
+    "f": {
+      "nullable": true,
+      "rules": [
+        {
+          "name": "maxlen",
+          "params": ["30"]
+        }
+      ],
+      "type": "email"
+    },
+    "g": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "max",
+          "params": ["100"]
+        }
+      ],
+      "type": "integer"
+    },
+    "h": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "len",
+          "params": ["5"]
+        }
+      ],
+      "type": "sequence"
+    },
+    "i": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "minlen",
+          "params": ["20"]
+        }, {
+          "name": "regex",
+          "params": ["^https"]
+        }
+      ],
+      "type": "url"
+    },
+    "l": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "decimal"
+        }
+      ],
+      "type": "string"
+    },
+    "m": {
+      "nullable": false,
+      "rules": [
+        {
+          "name": "min",
+          "params": ["-2"]
+        }
+      ],
+      "type": "float"
+    },
+    "n": {
+      "elements": {
+        "nullable": true,
+        "rules": [
+          {
+            "name": "maxlen",
+            "params": ["20"]
+          }
+        ],
+        "type": "string"
+      },
+      "nullable": true,
+      "rules": [
+        {
+          "name": "maxlen",
+          "params": ["100"]
+        }
+      ],
+      "type": "array"
+    },
+    "o": {
+      "nullable": false,
+      "rules": [],
+      "schema": {
+        "endpoint": {
+          "nullable": true,
+          "rules": [
+            {
+              "name": "maxlen",
+              "params": ["20"]
+            },
+            {
+              "alias": "protocol",
+              "name": "regex",
+              "params": ["^(?:http|ftp)s?://"]
+            }
+          ],
+          "type": "url"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "type": "object"
+}

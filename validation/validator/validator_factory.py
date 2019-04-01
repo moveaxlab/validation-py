@@ -1,13 +1,11 @@
+""" Validator Factory """
+from ..parser import SpecParser
+from ..types.type_factory import Type, TypeFactory
 
-class ValidatorFactory(object):
+
+class ValidatorFactory:
     @staticmethod
-    def make(schema):
-        from .array_validator import ArrayValidator
-        from .object_validator import ObjectValidator
-        from .primitive_validator import PrimitiveValidator
-        if schema['type'] == 'object':
-            return ObjectValidator(schema)
-        elif schema['type'] == 'array':
-            return ArrayValidator(schema)
-        else:
-            return PrimitiveValidator(schema)
+    def make(spec: dict) -> Type:
+        """ Parse the spec and return a Type wrapper """
+        ll_spec = SpecParser.parse(spec)
+        return TypeFactory.make(ll_spec)

@@ -1,22 +1,20 @@
+""" Equals """
 from .rule import Rule
+from ..constants import rules
+from ..types import Type
 
 
 class EqualsRule(Rule):
+    required_params = 1
+    supported_types = (Type,)
 
     @staticmethod
-    def name():
-        return 'equals'
+    def name() -> str:
+        return rules.EQUALS
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, value=params_string, spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the value is not equal to the target.
+        return str(value) == self.target
 
-    def __init__(self, alias, value, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.value = value
-
-    def apply(self, data):
-        return str(data) == self.value
-
-    def get_params(self):
-        return [self.value]
+    def _sanitize_params(self):
+        self.target = self.params[0]

@@ -1,22 +1,20 @@
+""" Min Length """
 from .rule import Rule
+from ..constants import rules
+from ..types import SequenceType, StringType
 
 
 class MinLengthRule(Rule):
+    required_params = 1
+    supported_types = (SequenceType, StringType,)
 
     @staticmethod
-    def name():
-        return 'minlen'
+    def name() -> str:
+        return rules.MINLEN
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, minlen=int(params_string), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail if the value's length is lower than min_length.
+        return len(value) >= self.min_length
 
-    def __init__(self, alias, minlen, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.minlen = minlen
-
-    def apply(self, data):
-        return len(data) >= self.minlen
-
-    def get_params(self):
-        return [self.minlen]
+    def _sanitize_params(self):
+        self.min_length = int(self.params[0])

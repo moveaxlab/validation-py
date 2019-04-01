@@ -1,24 +1,22 @@
+""" Max Size """
 from .rule import Rule
-
+from ..constants import rules
+from ..types import Base64EncodedFileType
 from ..utils.base64file_utils import get_size
 
 
 class MaxSizeRule(Rule):
+    required_params = 1
+    supported_types = (Base64EncodedFileType,)
 
     @staticmethod
-    def name():
-        return 'max_size'
+    def name() -> str:
+        return rules.MAX_SIZE
 
-    @classmethod
-    def parse(cls, alias, spec, params_string):
-        return cls(alias=alias, maxsize=int(params_string), spec=spec)
+    def _abides_by_the_rule(self, value) -> bool:
+        # Fail when the value's file size is greater than maxsize.
+        return get_size(value) <= self.maxsize
 
-    def __init__(self, alias, maxsize, spec):
-        super().__init__(alias=alias, spec=spec)
-        self.maxsize = maxsize
-
-    def apply(self, data):
-        return get_size(data) <= self.maxsize
-
-    def get_params(self):
-        return [self.maxsize]
+    def _sanitize_params(self):
+        # The file size is expressed in bytes.
+        self.maxsize = int(self.params[0])

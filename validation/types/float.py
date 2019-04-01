@@ -1,15 +1,13 @@
+""" Float """
 from .type import Type
-from ..rules import MinRule, MaxRule, BetweenRule
+from ..constants import types
 
 
-class Float(Type):
-
-    supported_rules = {MinRule, MaxRule, BetweenRule}
+class FloatType(Type):
+    @staticmethod
+    def name() -> str:
+        return types.FLOAT
 
     @staticmethod
-    def name():
-        return 'float'
-
-    @classmethod
-    def check(cls, value):
-        return isinstance(value, float) or isinstance(value, int)
+    def _validate_type(value) -> bool:
+        return isinstance(value, (int, float))

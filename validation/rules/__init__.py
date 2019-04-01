@@ -19,38 +19,33 @@ from .minlength import MinLengthRule
 from .minsize import MinSizeRule
 from .mustbetrue import MustBeTrueRule
 from .nullableif import NullableIfRule
-from .nullable import NullableRule
-from .operationalfield import OperationalFieldRule
 from .regex import RegexRule
 from .required import RequiredRule
-
 from .rule import Rule
-from .ruleset import RuleSet
+from ..constants.rules import *
 
 rules = {
-    'alpha': AlphaRule,
-    'alphadash': AlphaDashRule,
-    'alphanum': AlphaNumRule,
-    'between': BetweenRule,
-    'betweenlen': BetweenLengthRule,
-    'decimal': DecimalRule,
-    'equals': EqualsRule,
-    'equals_to': EqualsToRule,
-    'file_format': FileFormatRule,
-    'file_type': FileTypeRule,
-    'hex': HexRule,
-    'in': InRule,
-    'len': LengthRule,
-    'max': MaxRule,
-    'max_size': MaxSizeRule,
-    'maxlen': MaxLengthRule,
-    'min': MinRule,
-    'min_size': MinSizeRule,
-    'minlen': MinLengthRule,
-    'must_be_true': MustBeTrueRule,
-    'nullable_if': NullableIfRule,
-    'nullable': NullableRule,
-    'operational_field_tmp_rule': OperationalFieldRule,
-    'regex': RegexRule,
-    'required': RequiredRule,
+    ALPHA: AlphaRule,
+    ALPHADASH: AlphaDashRule,
+    ALPHANUM: AlphaNumRule,
+    BETWEEN: BetweenRule,
+    BETWEENLEN: BetweenLengthRule,
+    DECIMAL: DecimalRule,
+    EQUALS: EqualsRule,
+    EQUALS_TO: EqualsToRule,
+    FILE_FORMAT: FileFormatRule,
+    FILE_TYPE: FileTypeRule,
+    HEX: HexRule,
+    IN: InRule,
+    LEN: LengthRule,
+    MAX: MaxRule,
+    MAX_SIZE: MaxSizeRule,
+    MAXLEN: MaxLengthRule,
+    MIN: MinRule,
+    MIN_SIZE: MinSizeRule,
+    MINLEN: MinLengthRule,
+    MUST_BE_TRUE: MustBeTrueRule,
+    NULLABLE_IF: NullableIfRule,
+    REGEX: RegexRule,
+    REQUIRED: RequiredRule,
 }

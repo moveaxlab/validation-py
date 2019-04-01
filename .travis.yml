@@ -1,0 +1,29 @@
+language: python
+python: 3.5
+
+branches:
+  only:
+    - master
+    - /version\/\d+\.\d+/
+
+cache:
+  pip: true
+  directories:
+    - "$HOME/.cache/pre-commit"
+
+before_install:
+  - pip install poetry
+install:
+  - poetry install -v
+script:
+  - python3 unit.py
+
+before_deploy:
+  - poetry config http-basic.pypi $PYPI_USER $PYPI_PASSWORD
+  - poetry build
+deploy:
+  provider: script
+  script: poetry publish
+  on:
+    repo: moveaxlab/validation-py
+    tags: true

@@ -1,17 +1,15 @@
+""" Sequence """
 from .type import Type
+from ..constants import types
 
-from ..rules import MinLengthRule, MaxLengthRule, BetweenLengthRule, LengthRule
 
-
-class Sequence(Type):
-
-    supported_rules = {MinLengthRule, MaxLengthRule, BetweenLengthRule, LengthRule}
+class SequenceType(Type):
     null_values = [[]]
 
     @staticmethod
-    def name():
-        return 'sequence'
+    def name() -> str:
+        return types.SEQUENCE
 
-    @classmethod
-    def check(cls, value):
+    @staticmethod
+    def _validate_type(value) -> bool:
         return hasattr(value, '__iter__')
