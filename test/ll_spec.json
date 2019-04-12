@@ -2,6 +2,9 @@
   "nullable": true,
   "rules": [
     {
+      "name": "strict"
+    },
+    {
       "name": "required",
       "params": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "l", "m"]
     }
@@ -137,7 +140,11 @@
     },
     "o": {
       "nullable": false,
-      "rules": [],
+      "rules": [
+        {
+          "name": "strict"
+        }
+      ],
       "schema": {
         "endpoint": {
           "nullable": true,

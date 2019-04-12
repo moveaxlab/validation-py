@@ -22,6 +22,7 @@ from .nullableif import NullableIfRule
 from .regex import RegexRule
 from .required import RequiredRule
 from .rule import Rule
+from .strict import StrictRule
 from ..constants.rules import *
 
 rules = {
@@ -48,4 +49,5 @@ rules = {
     NULLABLE_IF: NullableIfRule,
     REGEX: RegexRule,
     REQUIRED: RequiredRule,
+    STRICT: StrictRule,
 }
