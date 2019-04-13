@@ -36,7 +36,6 @@ class CompositeType(Type):
                     try:
                         self.schema[k].validate(v)
                     except KeyError:
-                        # TODO: implement strict validation
                         pass
                     except ValidationError as key_exc:
                         schema_errors[k] = key_exc.get_errors()
