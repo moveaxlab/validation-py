@@ -19,3 +19,4 @@ python-dateutil = "^2.7.3"
 
 [tool.poetry.dev-dependencies]
 coverage = {version = "^4.5",python = "^3.5"}
+coveralls = "^1.7"
