@@ -16,7 +16,9 @@ before_install:
 install:
   - poetry install -v
 script:
-  - python3 unit.py
+  - poetry run coverage run unit.py
+after_success:
+  - poetry run coveralls
 
 before_deploy:
   - poetry config http-basic.pypi $PYPI_USER $PYPI_PASSWORD
