@@ -219,69 +219,15 @@ class TestRules(TestCase):
 
 
 class TestSpecParser(TestCase):
-    def test_nullable_rule_is_removed(self):
-        parsed_ll_spec = SpecParser.parse({"rules": rules.NULLABLE, "type": types.INTEGER}, strict=False)
-        self.assertListEqual(parsed_ll_spec['rules'], [], 'Nullable rule was not removed')
+    def test_incorrect_parsing(self):
+        for failure_test in vectors['parser']['failure']:
+            with self.assertRaises(SpecError, msg=failure_test['case']):
+                SpecParser.parse(failure_test['spec'], strict=failure_test['strict'])
 
-    def test_parsing_incorrect_rule_format(self):
-        with self.assertRaises(SpecError, msg='The parser incorrectly accepted a rule'):
-            SpecParser.parse({"rules": ["{}<123>".format(rules.BETWEEN)], "type": types.STRING}, strict=False)
-
-    def test_parsing_no_rules_submitted(self):
-        with self.assertRaises(SpecError, msg='The key "rules" is required.'):
-            SpecParser.parse({"type": types.STRING}, strict=False)
-
-    def test_parsing_no_type_submitted(self):
-        with self.assertRaises(SpecError, msg='The key "type" is required.'):
-            SpecParser.parse({"rules": "{}:10|{}".format(rules.MAX, rules.NULLABLE)}, strict=False)
-
-    def test_parsing_incorrect_elements_usage(self):
-        with self.assertRaises(SpecError, msg='Only "array" structures must define "elements"'):
-            SpecParser.parse({"elements": {"rules": ["{}:100".format(rules.MAXLEN)], "type": types.STRING},
-                              "rules": ["{}:100".format(rules.MAXLEN), rules.NULLABLE], "type": types.STRING},
-                             strict=False)
-
-    def test_parsing_incorrect_schema_usage(self):
-        with self.assertRaises(SpecError, msg='Only "object" structures must define a "schema"'):
-            SpecParser.parse({"rules": ["{}:100".format(rules.MAXLEN), rules.NULLABLE], "type": types.STRING,
-                              "schema": {"a": {"rules": ["{}:100".format(rules.MAXLEN)], "type": types.STRING}}},
-                             strict=False)
-
-    def test_required_rule_parsing(self):
-        parsed_ll_spec = SpecParser.parse({"rules": [rules.NULLABLE], "type": types.OBJECT,
-                                           "schema": {"a": {"rules": [rules.REQUIRED, rules.NULLABLE],
-                                                            "type": types.STRING},
-                                                      "b": {"rules": [rules.NULLABLE], "type": types.STRING},
-                                                      "c": {"rules": "{}|{}".format(rules.REQUIRED, rules.NULLABLE),
-                                                            "type": types.FLOAT}}}, strict=False)
-        self.assertEqual(parsed_ll_spec['rules'][-1]['name'],
-                         'required', 'Required is not a top level rule')
-        self.assertSetEqual(set(parsed_ll_spec['rules'][-1]['params']),
-                            {"a", "c"}, 'Not all required keys are listed')
-
-    def test_strict_rule_parsing(self):
-        parsed_ll_spec = SpecParser.parse({"rules": [], "type": types.OBJECT,
-                                           "schema": {
-                                               "a": {
-                                                   "elements": {
-                                                       "rules": [],
-                                                       "type": types.OBJECT
-                                                   },
-                                                   "rules": [rules.NULLABLE],
-                                                   "type": types.ARRAY}}}, strict=True)
-        self.assertEqual(parsed_ll_spec['rules'][-1]['name'],
-                         'strict', 'Strict rule was not added as top level object rule')
-        self.assertEqual(parsed_ll_spec['schema']['a']['elements']['rules'][-1]['name'],
-                         'strict', 'Strict rule was not added as nested object rule')
-
-    def test_whole_parsing_example(self):
+    def test_successful_parsing(self):
         self.maxDiff = None
-        with open(os.path.join(dir_path, 'test', 'hl_spec.json')) as hl_spec_file:
-            hl_spec = json.load(hl_spec_file)
-        with open(os.path.join(dir_path, 'test', 'll_spec.json')) as ll_spec_file:
-            ll_spec = json.load(ll_spec_file)
-        parsed_ll_spec = SpecParser.parse(hl_spec, strict=True)
-        self.assertDictEqual(turn_lists_to_sets(ll_spec), turn_lists_to_sets(parsed_ll_spec))
+        parsed_ll_spec = SpecParser.parse(vectors['parser']['success']['high-level'], strict=vectors['parser']['success']['strict'])
+        self.assertDictEqual(turn_lists_to_sets(vectors['parser']['success']['low-level']), turn_lists_to_sets(parsed_ll_spec))
 
 
 if __name__ == '__main__':
