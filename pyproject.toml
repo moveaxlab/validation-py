@@ -15,9 +15,7 @@ keywords = [
 ]
 license = "MIT"
 name = "moveax-validation"
-packages = [
-    { include = "validation" }
-]
+packages = [{ include = "validation" }]
 readme = "README.md"
 repository = "https://github.com/moveaxlab/validation-py/"
 version = "2.0.0"
@@ -28,5 +26,5 @@ python = "^3.5"
 python-dateutil = "^2.7.3"
 
 [tool.poetry.dev-dependencies]
-coverage = {python = "^3.5", version = "^4.5"}
+coverage = { python = "^3.5", version = "^4.5" }
 coveralls = "^1.7"
