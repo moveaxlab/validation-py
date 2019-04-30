@@ -57,7 +57,7 @@ description = "Python version of Google's common library for parsing, formatting
 name = "phonenumbers"
 optional = false
 python-versions = "*"
-version = "8.10.8"
+version = "8.10.10"
 
 [[package]]
 category = "main"
@@ -98,7 +98,7 @@ description = "HTTP library with thread-safe connection pooling, file post, and 
 name = "urllib3"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
-version = "1.24.1"
+version = "1.24.2"
 
 [metadata]
 content-hash = "b2c9be7e780f797a8c81f1be44cd005bf0ac9e16bbc8400856d0a61774265d4a"
@@ -111,8 +111,8 @@ coverage = ["0c5fe441b9cfdab64719f24e9684502a59432df7570521563d7b1aff27ac755f", 
 coveralls = ["baa26648430d5c2225ab12d7e2067f75597a4b967034bba7e3d5ab7501d207a1", "ff9b7823b15070f26f654837bb02a201d006baaf2083e0514ffd3b34a3ffed81"]
 docopt = ["49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
-phonenumbers = ["7e199f16fce58590076641cf54963048ce659cf6154155c1bdd213d16eb72980", "e27962c65d63a03ebd753e2883c255dedac5699bb42634094abceebaa97547cd"]
+phonenumbers = ["dabc8cfcff96446b0787ea337739ea286ec3949ec27a4790a9b4587817da5c5f", "efac24159582581d8ac467b5fc23fea298b1c101e6947f37c2ab666ec18f6cde"]
 python-dateutil = ["7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb", "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"]
 requests = ["502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e", "7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b"]
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
-urllib3 = ["61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39", "de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"]
+urllib3 = ["4c291ca23bbb55c76518905869ef34bdd5f0e46af7afe6861e8375643ffee1a0", "9a247273df709c4fedb38c711e44292304f73f39ab01beda9f6b9fc375669ac3"]
