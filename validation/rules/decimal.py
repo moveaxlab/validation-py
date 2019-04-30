@@ -1,3 +1,5 @@
+import re
+
 from decimal import Decimal
 
 from .rule import Rule
@@ -10,6 +12,8 @@ class DecimalRule(Rule):
         return 'decimal'
 
     def apply(self, data):
+        if re.match('^\d{1,7}(\.\d{1,2})?$', data) is None:
+            return False
         try:
             Decimal(data)
             return True

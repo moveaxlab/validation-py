@@ -1,3 +1,4 @@
 [submodule "validation-test-vectors"]
 	path = validation-test-vectors
 	url = git@github.com:moveaxlab/validation-test-vectors.git
+	branch = version/1.0
