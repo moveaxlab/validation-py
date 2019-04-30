@@ -9,10 +9,7 @@ authors = [
 ]
 description = "Python implementation of our validation library"
 homepage = "https://github.com/moveaxlab/validation-py/"
-keywords = [
-    "schema",
-    "validation"
-]
+keywords = ["schema", "validation"]
 license = "MIT"
 name = "moveax-validation"
 packages = [{ include = "validation" }]
