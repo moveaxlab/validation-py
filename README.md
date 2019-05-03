@@ -6,7 +6,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/moveax-validation.svg)
 
 ## Installation
-- Install from [Pypi](https://pypi.org/project/moveax-validation/):
+- Install from [PyPI](https://pypi.org/project/moveax-validation/):
 
     ```console
     $ pip install moveax-validation
@@ -22,13 +22,13 @@
 
     >>> data = ['foo', 'bar']
     >>> schema = {
-        'elements': {
-            'rules': ['minlen:3']
-            'type': 'string'
-        },
-        'rules': ['maxlen:3'],
-        'type': 'array'
-    }
+    ...     'elements': {
+    ...         'rules': ['regex:foo|bar']
+    ...         'type': 'string'
+    ...     },
+    ...     'rules': ['len:2'],
+    ...     'type': 'array'
+    ... }
     >>> validator = ValidatorFactory.make(schema)
     >>> validator.validate(data)
     ```
