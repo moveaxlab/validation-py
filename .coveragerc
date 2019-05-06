@@ -2,6 +2,7 @@
 exclude_lines = def __str__
                 def name()
                 raise NotImplementedError
+                if match is None
 show_missing = True
 
 [run]

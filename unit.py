@@ -217,6 +217,25 @@ class TestRules(TestCase):
         self.assertIsNotNone(ValidatorFactory.make({"rules": [rules.ALPHANUM], "type": types.EMAIL}),
                              'The supported types are not inherited correctly.')
 
+    def test_between_rule(self):
+        self.assertIsNone(ValidatorFactory.make({"rules": ["{}:2,3".format(rules.BETWEEN)],
+                                                 "type": types.INTEGER}).validate(3))
+
+    def test_array_nullable_validation(self):
+        self.assertIsNone(ValidatorFactory.make({"elements": {"rules": [], "type": types.BOOLEAN},
+                                                 "rules": ["{}:2".format(rules.LEN), "nullable"],
+                                                 "type": types.ARRAY}).validate([]))
+
+    def test_composite_type_validation(self):
+        with self.assertRaises(ValidationError, msg='Composite type should correctly identify an object'):
+            self.assertIsNone(ValidatorFactory.make({"schema": {"a": {"rules": [], "type": types.BOOLEAN}},
+                                                     "rules": [],
+                                                     "type": types.OBJECT}).validate(True))
+
+    def test_phone_type_validation(self):
+        with self.assertRaises(ValidationError, msg='Phone type should correctly identify a valid number'):
+            self.assertIsNone(ValidatorFactory.make({"rules": [],
+                                                     "type": types.PHONE}).validate("+99123115131"))
 
 class TestSpecParser(TestCase):
     def test_incorrect_parsing(self):
