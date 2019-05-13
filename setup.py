@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='moveax-validation',
-    version='1.1.1',
+    version='1.1.2',
     maintainer='Michelle Laurenti',
     maintainer_email='michelle.laurenti@chainside.net',
     packages=find_packages(),
