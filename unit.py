@@ -70,12 +70,10 @@ class TestValidators(TestCase):
             for data in spec['success']:
                 self.assertIsNone(validator.validate(data))
             for data in spec['failure']:
-                try:
-                    with self.assertRaises(ValidationError):
-                        validator.validate(data['data'])
-                except ValidationError as e:
-                    self.assertEqual(turn_lists_to_sets(data['failing']),
-                                     turn_lists_to_sets(e.to_json()))
+                with self.assertRaises(ValidationError) as cm:
+                    validator.validate(data['data'])
+                self.assertEqual(turn_lists_to_sets(data['failing']),
+                                 turn_lists_to_sets(cm.exception.to_json()))
 
     def test_strict_validation(self):
         for spec in vectors['strict']:
@@ -85,12 +83,10 @@ class TestValidators(TestCase):
 
             for data in spec['failure']:
                 validator = ValidatorFactory.make(spec['spec'], strict=True)
-                try:
-                    with self.assertRaises(ValidationError):
-                        validator.validate(data['data'])
-                except ValidationError as e:
-                    self.assertEqual(turn_lists_to_sets(data['failing']),
-                                     turn_lists_to_sets(e.to_json()))
+                with self.assertRaises(ValidationError) as cm:
+                    validator.validate(data['data'])
+                self.assertEqual(turn_lists_to_sets(data['failing']),
+                                 turn_lists_to_sets(cm.exception.to_json()))
 
     def test_strict_validation_without_schema(self):
         validator = ValidatorFactory.make({"rules": [], "type": types.OBJECT}, strict=True)
