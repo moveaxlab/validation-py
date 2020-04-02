@@ -19,6 +19,7 @@ from .minlength import MinLengthRule
 from .minsize import MinSizeRule
 from .mustbetrue import MustBeTrueRule
 from .nullableif import NullableIfRule
+from .phonetype import PhoneTypeRule
 from .regex import RegexRule
 from .required import RequiredRule
 from .rule import Rule
@@ -47,6 +48,7 @@ rules = {
     MINLEN: MinLengthRule,
     MUST_BE_TRUE: MustBeTrueRule,
     NULLABLE_IF: NullableIfRule,
+    PHONE_TYPE: PhoneTypeRule,
     REGEX: RegexRule,
     REQUIRED: RequiredRule,
     STRICT: StrictRule,
